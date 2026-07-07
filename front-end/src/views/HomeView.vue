@@ -37,17 +37,27 @@ const comoFunciona = [
 ]
 
 function submitSearch() {
-  const query = {}
-  if (form.value.chassi) query.chassi = form.value.chassi
-  if (form.value.modelo) query.modelo = form.value.modelo
-  if (form.value.ano) query.ano = form.value.ano
+  const chassi = form.value.chassi.trim()
+  const modelo = form.value.modelo.trim()
+  const ano = form.value.ano.trim()
 
-  const isVin = form.value.chassi.replace(/\s/g, '').length >= 11
+  if (!chassi && !modelo && !ano) {
+    vehicle.clear()
+    router.push({ name: 'pecas' })
+    return
+  }
+
+  const query = {}
+  if (chassi) query.chassi = chassi
+  if (modelo) query.modelo = modelo
+  if (ano) query.ano = ano
+
+  const isVin = chassi.replace(/\s/g, '').length >= 11
   vehicle.setContext({
-    montadora: isVin ? null : form.value.chassi || null,
-    modelo: form.value.modelo || null,
-    ano: form.value.ano ? Number(form.value.ano) : null,
-    vin: isVin ? form.value.chassi.trim() : null,
+    montadora: isVin ? null : chassi || null,
+    modelo: modelo || null,
+    ano: ano ? Number(ano) : null,
+    vin: isVin ? chassi : null,
   })
   router.push({ name: 'pecas', query })
 }
