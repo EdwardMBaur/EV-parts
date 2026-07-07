@@ -160,7 +160,7 @@ async function submit() {
           placeholder="00000-000"
           inputmode="numeric"
           :error="errors.cep"
-          :hint="loadingCep ? 'Buscando…' : 'auto-preenche'"
+          :hint="loadingCep ? 'Buscando…' : undefined"
           @update:model-value="onCepInput"
         />
         <BaseInput :model-value="form.cidade_uf" label="Cidade / UF" placeholder="Preenchido via API" disabled />

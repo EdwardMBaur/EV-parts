@@ -20,6 +20,8 @@ const meta = computed(() => {
   return parts.join(' · ')
 })
 
+const semEstoque = computed(() => (props.peca.estoque ?? 0) <= 0)
+
 function goToDetail() {
   router.push({ name: 'peca-detalhe', params: { id: props.peca.id_peca } })
 }
@@ -34,7 +36,13 @@ function goToDetail() {
       @click="goToDetail"
     >
       <CompatBadge v-if="peca.compativel" class="absolute right-3 top-3" />
-      <PartThumb :categoria="peca.nome_categoria" size="lg" />
+      <span
+        v-if="semEstoque"
+        class="absolute left-3 top-3 rounded-full bg-rose-100 px-2.5 py-1 text-xs font-semibold text-rose-600"
+      >
+        Esgotado
+      </span>
+      <PartThumb :categoria="peca.nome_categoria" size="lg" :class="semEstoque ? 'opacity-40' : ''" />
     </button>
 
     <div class="flex flex-1 flex-col gap-1 p-4">
@@ -49,7 +57,7 @@ function goToDetail() {
         <p class="text-lg font-bold text-electric-600">{{ formatCurrencyShort(peca.preco) }}</p>
         <button
           class="flex size-9 items-center justify-center rounded-lg border border-electric-500/20 bg-electric-500/10 text-electric-600 transition-colors hover:bg-electric-500/20 disabled:cursor-not-allowed disabled:opacity-50"
-          :disabled="peca.estoque === 0"
+          :disabled="semEstoque"
           aria-label="Adicionar ao carrinho"
           @click="emit('add', peca)"
         >

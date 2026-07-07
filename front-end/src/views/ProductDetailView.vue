@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter, RouterLink } from 'vue-router'
-import { ChevronLeft, ChevronRight, ShoppingCart, Heart, ShieldCheck, FileText } from '@lucide/vue'
+import { ChevronLeft, ChevronRight, ShoppingCart, ShieldCheck, FileText } from '@lucide/vue'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import CompatBadge from '@/components/ui/CompatBadge.vue'
@@ -79,14 +79,27 @@ async function fetchPeca() {
   }
 }
 
+const semEstoque = computed(() => (peca.value?.estoque ?? 0) <= 0)
+
+function tryAdd() {
+  const result = cart.addItem(peca.value)
+  if (!result.ok) {
+    toast.error('Você já adicionou todo o estoque disponível desta peça')
+    return false
+  }
+  return true
+}
+
 function addToCart() {
-  cart.addItem(peca.value)
-  toast.success('Peça adicionada ao carrinho')
+  if (tryAdd()) {
+    toast.success('Peça adicionada ao carrinho')
+  }
 }
 
 function buyNow() {
-  cart.addItem(peca.value)
-  router.push('/carrinho')
+  if (tryAdd()) {
+    router.push('/carrinho')
+  }
 }
 
 onMounted(fetchPeca)
@@ -196,22 +209,35 @@ onMounted(fetchPeca)
             <p class="mt-1 text-3xl font-bold text-electric-600">{{ formatCurrency(peca.preco) }}</p>
             <p class="text-sm text-ink-500">{{ formatInstallments(peca.preco) }}</p>
 
+            <p
+              class="mt-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium"
+              :class="
+                semEstoque
+                  ? 'bg-rose-100 text-rose-600'
+                  : 'bg-emerald-accent/10 text-emerald-accent-dark'
+              "
+            >
+              {{
+                semEstoque
+                  ? 'Esgotado'
+                  : peca.estoque === 1
+                    ? 'Última unidade disponível'
+                    : `${peca.estoque} unidades disponíveis`
+              }}
+            </p>
+
             <hr class="my-4 border-slate-200" />
 
             <FreightCalculator :id-peca="peca.id_peca" />
 
             <div class="mt-5 space-y-3">
-              <BaseButton variant="primary" size="lg" block @click="addToCart">
+              <BaseButton variant="primary" size="lg" block :disabled="semEstoque" @click="addToCart">
                 <template #icon><ShoppingCart class="size-5" /></template>
-                Adicionar ao carrinho
+                {{ semEstoque ? 'Indisponível' : 'Adicionar ao carrinho' }}
               </BaseButton>
-              <div class="grid grid-cols-2 gap-3">
-                <BaseButton variant="success" size="md" @click="buyNow">Comprar agora</BaseButton>
-                <BaseButton variant="outline" size="md">
-                  <template #icon><Heart class="size-4" /></template>
-                  Salvar
-                </BaseButton>
-              </div>
+              <BaseButton variant="success" size="md" block :disabled="semEstoque" @click="buyNow">
+                Comprar agora
+              </BaseButton>
             </div>
           </div>
 

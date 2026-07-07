@@ -70,7 +70,11 @@ async function fetchPecas() {
 }
 
 function addToCart(peca) {
-  cart.addItem(peca)
+  const result = cart.addItem(peca)
+  if (!result.ok) {
+    toast.error(`Estoque insuficiente para "${peca.nome_peca}"`)
+    return
+  }
   toast.success(`${peca.nome_peca} adicionado ao carrinho`)
 }
 
