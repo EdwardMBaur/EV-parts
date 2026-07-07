@@ -51,18 +51,16 @@ function logout() {
         />
       </form>
 
-      <div class="flex flex-1 items-center justify-end gap-2 sm:flex-none">
+      <div class="flex flex-1 items-center justify-end gap-2 sm:ml-auto sm:flex-none">
         <template v-if="!auth.isAuthenticated">
           <RouterLink to="/suporte" class="hidden sm:block">
-            <BaseButton variant="outline" size="sm" class="border-white/30 bg-transparent text-white hover:bg-white/10">
+            <BaseButton variant="outlineLight" size="sm">
               <template #icon><Headphones class="size-4" /></template>
               Suporte
             </BaseButton>
           </RouterLink>
           <RouterLink to="/login">
-            <BaseButton variant="outline" size="sm" class="border-white/30 bg-transparent text-white hover:bg-white/10">
-              Entrar
-            </BaseButton>
+            <BaseButton variant="outlineLight" size="sm">Entrar</BaseButton>
           </RouterLink>
           <RouterLink to="/cadastro">
             <BaseButton variant="success" size="sm">Cadastrar</BaseButton>

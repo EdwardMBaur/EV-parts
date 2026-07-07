@@ -122,7 +122,7 @@ onMounted(async () => {
         <button
           v-for="cat in categorias"
           :key="cat.id_categoria"
-          class="flex flex-col items-center gap-2 rounded-xl border border-slate-200 bg-white p-5 text-center transition-shadow hover:shadow-md"
+          class="flex cursor-pointer flex-col items-center gap-2 rounded-xl border border-slate-200 bg-white p-5 text-center transition-shadow hover:shadow-md"
           @click="goToCategory(cat)"
         >
           <span

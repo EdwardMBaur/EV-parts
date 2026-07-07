@@ -86,17 +86,6 @@ async function submit() {
       <BaseButton type="submit" variant="primary" size="lg" block :loading="loading">Entrar</BaseButton>
     </form>
 
-    <div class="my-5 flex items-center gap-3 text-xs text-ink-400">
-      <span class="h-px flex-1 bg-slate-200" />
-      ou continue com
-      <span class="h-px flex-1 bg-slate-200" />
-    </div>
-
-    <div class="grid grid-cols-2 gap-3">
-      <BaseButton variant="outline" size="md" disabled>Google</BaseButton>
-      <BaseButton variant="outline" size="md" disabled>Apple</BaseButton>
-    </div>
-
     <p class="mt-6 text-center text-sm text-ink-500">
       Não tem conta?
       <RouterLink to="/cadastro" class="font-semibold text-electric-600 hover:underline">
