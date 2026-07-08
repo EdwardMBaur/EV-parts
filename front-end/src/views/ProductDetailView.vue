@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter, RouterLink } from 'vue-router'
-import { ChevronLeft, ChevronRight, ShoppingCart, ShieldCheck, FileText } from '@lucide/vue'
+import { ChevronLeft, ChevronRight, ShoppingCart, ShieldCheck, FileText } from 'lucide-vue-next'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import CompatBadge from '@/components/ui/CompatBadge.vue'

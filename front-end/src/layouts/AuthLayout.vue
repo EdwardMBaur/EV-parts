@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink } from 'vue-router'
-import { ShieldCheck, Truck, FileText } from '@lucide/vue'
+import { ShieldCheck, Truck, FileText } from 'lucide-vue-next'
 
 const props = defineProps({
   title: { type: String, required: true },

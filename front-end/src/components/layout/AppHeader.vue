@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { RouterLink, useRouter, useRoute } from 'vue-router'
-import { ShoppingCart, User, Search, LogOut, Headphones } from '@lucide/vue'
+import { ShoppingCart, User, Search, LogOut, Headphones } from 'lucide-vue-next'
 import { useAuthStore } from '@/stores/auth'
 import { useCartStore } from '@/stores/cart'
 import BaseButton from '@/components/ui/BaseButton.vue'

@@ -1,6 +1,6 @@
 <script setup>
 import { ref, reactive } from 'vue'
-import { Headphones, Mail, MessageCircle } from '@lucide/vue'
+import { Headphones, Mail, MessageCircle } from 'lucide-vue-next'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import BaseInput from '@/components/ui/BaseInput.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'

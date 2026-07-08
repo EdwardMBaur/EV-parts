@@ -1,6 +1,6 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
-import { MapPinned, Trash2 } from '@lucide/vue'
+import { MapPinned, Trash2 } from 'lucide-vue-next'
 import AccountLayout from '@/layouts/AccountLayout.vue'
 import LoadingSpinner from '@/components/ui/LoadingSpinner.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'

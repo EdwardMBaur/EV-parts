@@ -1,5 +1,5 @@
 <script setup>
-import { Loader2 } from '@lucide/vue'
+import { Loader2 } from 'lucide-vue-next'
 
 defineProps({
   label: { type: String, default: 'Carregando…' },

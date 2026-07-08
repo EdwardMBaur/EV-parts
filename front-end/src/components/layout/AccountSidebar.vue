@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink, useRoute } from 'vue-router'
-import { LayoutDashboard, ClipboardList, MapPinned, User } from '@lucide/vue'
+import { LayoutDashboard, ClipboardList, MapPinned, User } from 'lucide-vue-next'
 
 const route = useRoute()
 

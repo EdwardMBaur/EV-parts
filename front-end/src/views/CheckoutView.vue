@@ -1,7 +1,7 @@
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
-import { CreditCard, QrCode, FileText, MapPin, Check } from '@lucide/vue'
+import { CreditCard, QrCode, FileText, MapPin, Check } from 'lucide-vue-next'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import CheckoutStepper from '@/components/checkout/CheckoutStepper.vue'
 import BaseInput from '@/components/ui/BaseInput.vue'

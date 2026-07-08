@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { ShoppingCart } from '@lucide/vue'
+import { ShoppingCart } from 'lucide-vue-next'
 import CompatBadge from '@/components/ui/CompatBadge.vue'
 import PartThumb from '@/components/catalog/PartThumb.vue'
 import { formatCurrencyShort } from '@/utils/format'

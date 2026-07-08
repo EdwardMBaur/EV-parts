@@ -1,5 +1,5 @@
 <script setup>
-import { Check } from '@lucide/vue'
+import { Check } from 'lucide-vue-next'
 
 defineProps({
   label: { type: String, default: 'Compatível' },

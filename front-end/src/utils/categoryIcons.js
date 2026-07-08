@@ -8,7 +8,7 @@ import {
   Thermometer,
   CircuitBoard,
   Package,
-} from '@lucide/vue'
+} from 'lucide-vue-next'
 
 const map = {
   Baterias: { icon: BatteryCharging, tint: 'text-electric-500 bg-electric-500/10' },

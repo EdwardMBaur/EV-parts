@@ -1,7 +1,7 @@
 <script setup>
 import { ref, reactive, computed, onMounted, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
-import { ShieldCheck, SlidersHorizontal, X } from '@lucide/vue'
+import { ShieldCheck, SlidersHorizontal, X } from 'lucide-vue-next'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import CatalogFilters from '@/components/catalog/CatalogFilters.vue'
 import PartCard from '@/components/catalog/PartCard.vue'

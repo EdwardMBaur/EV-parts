@@ -1,7 +1,7 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import { RouterLink, useRouter, useRoute } from 'vue-router'
-import { Eye, EyeOff } from '@lucide/vue'
+import { Eye, EyeOff } from 'lucide-vue-next'
 import AuthLayout from '@/layouts/AuthLayout.vue'
 import BaseInput from '@/components/ui/BaseInput.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'

@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { Info, Truck, Zap } from '@lucide/vue'
+import { Info, Truck, Zap } from 'lucide-vue-next'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import { logisticaService } from '@/services/logisticaService'
 import { formatCurrencyShort, formatCep } from '@/utils/format'

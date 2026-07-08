@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { Loader2 } from '@lucide/vue'
+import { Loader2 } from 'lucide-vue-next'
 
 const props = defineProps({
   variant: { type: String, default: 'primary' },

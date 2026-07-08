@@ -1,5 +1,5 @@
 <script setup>
-import { PackageOpen } from '@lucide/vue'
+import { PackageOpen } from 'lucide-vue-next'
 
 defineProps({
   title: { type: String, default: 'Nada por aqui' },

@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
-import { ArrowLeft, Truck } from '@lucide/vue'
+import { ArrowLeft, Truck } from 'lucide-vue-next'
 import AccountLayout from '@/layouts/AccountLayout.vue'
 import LoadingSpinner from '@/components/ui/LoadingSpinner.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
