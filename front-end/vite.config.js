@@ -9,8 +9,12 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [vue(), vueDevTools(), tailwindcss()],
   resolve: {
+    dedupe: ['vue'],
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
+  },
+  optimizeDeps: {
+    include: ['vue', 'vue-router', 'pinia', 'axios', 'lucide-vue-next'],
   },
 })

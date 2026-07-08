@@ -170,7 +170,11 @@ onMounted(fetchPecas)
 
       <div class="mt-4 grid grid-cols-1 gap-6 lg:grid-cols-[260px_1fr]">
         <aside class="hidden lg:block">
-          <CatalogFilters v-model="filters" @apply="fetchPecas" />
+          <CatalogFilters
+            :model-value="filters"
+            @update:model-value="Object.assign(filters, $event)"
+            @apply="fetchPecas"
+          />
         </aside>
 
         <div>
@@ -214,7 +218,8 @@ onMounted(fetchPecas)
           <button class="text-ink-500" @click="showFiltersMobile = false"><X class="size-5" /></button>
         </div>
         <CatalogFilters
-          v-model="filters"
+          :model-value="filters"
+          @update:model-value="Object.assign(filters, $event)"
           @apply="() => { fetchPecas(); showFiltersMobile = false }"
         />
       </div>
