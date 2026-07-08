@@ -1,6 +1,6 @@
 <script setup>
 import { ref, reactive, computed, onMounted, watch } from 'vue'
-import { RouterLink, useRoute } from 'vue-router'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { ShieldCheck, SlidersHorizontal, X } from 'lucide-vue-next'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import CatalogFilters from '@/components/catalog/CatalogFilters.vue'
@@ -15,6 +15,7 @@ import { useToast } from '@/composables/useToast'
 import { extractError } from '@/services/http'
 
 const route = useRoute()
+const router = useRouter()
 const vehicle = useVehicleStore()
 const cart = useCartStore()
 const toast = useToast()
@@ -92,7 +93,7 @@ function addToCart(peca) {
 
 function clearVehicle() {
   vehicle.clear()
-  fetchPecas()
+  router.push({ name: 'home' })
 }
 
 watch(
