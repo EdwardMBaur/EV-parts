@@ -13,6 +13,7 @@ import { extractError } from '@/services/http'
 import { enderecoService } from '@/services/enderecoService'
 import { logisticaService } from '@/services/logisticaService'
 import { pedidoService, pagamentoService } from '@/services/pedidoService'
+import { saveFreteLocal } from '@/utils/freteLocal'
 import { formatCurrency } from '@/utils/format'
 import { maskCep, onlyDigits } from '@/utils/masks'
 import { isValidCep } from '@/utils/validators'
@@ -163,6 +164,7 @@ async function finalizar() {
       itens: cart.items.map((i) => ({ id_peca: i.id_peca, quantidade: i.quantidade })),
       modal_frete: selectedFrete.value.codigo,
     })
+    saveFreteLocal(pedido.id_pedido, selectedFrete.value)
     await pagamentoService.iniciar({
       id_pedido: pedido.id_pedido,
       metodo_pagamento: metodoPagamento.value,

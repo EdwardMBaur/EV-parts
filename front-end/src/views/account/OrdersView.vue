@@ -8,6 +8,7 @@ import EmptyState from '@/components/ui/EmptyState.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import { orderStatus } from '@/utils/orderStatus'
 import { formatCurrency, formatDate } from '@/utils/format'
+import { totalEfetivo } from '@/utils/freteLocal'
 import { pedidoService } from '@/services/pedidoService'
 import { useToast } from '@/composables/useToast'
 import { extractError } from '@/services/http'
@@ -58,7 +59,7 @@ onMounted(async () => {
           <span class="rounded-full px-2.5 py-1 text-xs font-medium" :class="orderStatus(pedido.status_pedido).tint">
             {{ orderStatus(pedido.status_pedido).label }}
           </span>
-          <p class="text-base font-bold text-electric-600">{{ formatCurrency(pedido.valor_total) }}</p>
+          <p class="text-base font-bold text-electric-600">{{ formatCurrency(totalEfetivo(pedido)) }}</p>
         </div>
       </RouterLink>
     </div>

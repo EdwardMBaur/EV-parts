@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
 import { ArrowLeft, Truck } from 'lucide-vue-next'
 import AccountLayout from '@/layouts/AccountLayout.vue'
@@ -8,6 +8,7 @@ import EmptyState from '@/components/ui/EmptyState.vue'
 import PartThumb from '@/components/catalog/PartThumb.vue'
 import { orderStatus } from '@/utils/orderStatus'
 import { formatCurrency, formatDate } from '@/utils/format'
+import { freteEfetivo, totalEfetivo, getFreteLocal } from '@/utils/freteLocal'
 import { pedidoService } from '@/services/pedidoService'
 import { useToast } from '@/composables/useToast'
 import { extractError } from '@/services/http'
@@ -17,6 +18,9 @@ const toast = useToast()
 const pedido = ref(null)
 const loading = ref(true)
 const notFound = ref(false)
+
+const freteValor = computed(() => (pedido.value ? freteEfetivo(pedido.value) : 0))
+const freteInfo = computed(() => (pedido.value ? getFreteLocal(pedido.value.id_pedido) : null))
 
 onMounted(async () => {
   try {
@@ -91,14 +95,13 @@ onMounted(async () => {
             <span>Subtotal</span><span>{{ formatCurrency(pedido.valor_total) }}</span>
           </div>
           <div class="flex justify-between text-ink-700">
-            <span>Frete</span><span>{{ formatCurrency(pedido.valor_frete) }}</span>
+            <span>Frete{{ freteInfo?.nome ? ` (${freteInfo.nome})` : '' }}</span>
+            <span>{{ formatCurrency(freteValor) }}</span>
           </div>
           <hr class="border-slate-200" />
           <div class="flex justify-between text-base font-bold">
             <span class="text-ink-900">Total</span>
-            <span class="text-electric-600">
-              {{ formatCurrency(Number(pedido.valor_total) + Number(pedido.valor_frete)) }}
-            </span>
+            <span class="text-electric-600">{{ formatCurrency(totalEfetivo(pedido)) }}</span>
           </div>
         </div>
       </section>
