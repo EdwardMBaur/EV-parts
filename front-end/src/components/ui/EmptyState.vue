@@ -4,7 +4,12 @@ import { PackageOpen } from 'lucide-vue-next'
 defineProps({
   title: { type: String, default: 'Nada por aqui' },
   description: { type: String, default: '' },
-  icon: { type: [Object, Function], default: PackageOpen },
+  // Usamos uma factory (() => PackageOpen) em vez de passar o ícone direto.
+  // Ícones do lucide são componentes funcionais (funções); como o `type` inclui
+  // Function, o Vue trataria um default-função como factory e o INVOCARIA
+  // (PackageOpen()), quebrando com "Cannot destructure property 'slots'".
+  // A factory devolve o componente sem executá-lo.
+  icon: { type: [Object, Function], default: () => PackageOpen },
 })
 </script>
 
