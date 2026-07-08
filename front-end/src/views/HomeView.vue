@@ -8,13 +8,17 @@ import LoadingSpinner from '@/components/ui/LoadingSpinner.vue'
 import { categoryVisual } from '@/utils/categoryIcons'
 import { catalogService } from '@/services/catalogService'
 import { useVehicleStore } from '@/stores/vehicle'
+import { useToast } from '@/composables/useToast'
+import { extractError } from '@/services/http'
 
 const router = useRouter()
 const vehicle = useVehicleStore()
+const toast = useToast()
 
 const form = ref({ chassi: '', modelo: '', ano: '' })
 const categorias = ref([])
 const loadingCategorias = ref(true)
+const searching = ref(false)
 
 const destaque = ['Baterias', 'Inversores', 'Módulos Eletrônicos', 'Motores Elétricos']
 
@@ -36,7 +40,7 @@ const comoFunciona = [
   },
 ]
 
-function submitSearch() {
+async function submitSearch() {
   const chassi = form.value.chassi.trim()
   const modelo = form.value.modelo.trim()
   const ano = form.value.ano.trim()
@@ -47,19 +51,59 @@ function submitSearch() {
     return
   }
 
-  const query = {}
-  if (chassi) query.chassi = chassi
-  if (modelo) query.modelo = modelo
-  if (ano) query.ano = ano
+  searching.value = true
+  try {
+    const isVin = chassi.replace(/\s/g, '').length >= 11
+    const veiculo = await resolveVeiculo({ chassi, modelo, ano, isVin })
 
-  const isVin = chassi.replace(/\s/g, '').length >= 11
-  vehicle.setContext({
-    montadora: isVin ? null : chassi || null,
-    modelo: modelo || null,
-    ano: ano ? Number(ano) : null,
-    vin: isVin ? chassi : null,
+    if (!veiculo) {
+      vehicle.clear()
+      toast.error('Nenhum veículo encontrado com esses dados. Mostrando o catálogo completo.')
+      router.push({ name: 'pecas' })
+      return
+    }
+
+    vehicle.setContext({
+      id_veiculo: veiculo.id_veiculo,
+      montadora: veiculo.montadora,
+      modelo: veiculo.modelo,
+      ano: veiculo.ano_fabricacao,
+      versao_software: veiculo.versao_software || null,
+      vin: isVin ? chassi : null,
+    })
+    router.push({ name: 'pecas' })
+  } catch (error) {
+    toast.error(extractError(error, 'Não foi possível realizar a busca'))
+  } finally {
+    searching.value = false
+  }
+}
+
+async function resolveVeiculo({ chassi, modelo, ano, isVin }) {
+  const todos = await catalogService.listarVeiculos()
+
+  if (isVin) {
+    const prefixo = chassi.slice(0, 11).toUpperCase()
+    return todos.find((v) => v.vin_prefixo === prefixo) || null
+  }
+
+  const termo = chassi.toLowerCase()
+  let candidatos = todos.filter((v) => {
+    const okMontadora = !chassi || v.montadora.toLowerCase().includes(termo)
+    const okModelo = !modelo || v.modelo.toLowerCase().includes(modelo.toLowerCase())
+    const okAno = !ano || v.ano_fabricacao === Number(ano)
+    return okMontadora && okModelo && okAno
   })
-  router.push({ name: 'pecas', query })
+
+  if (!candidatos.length && chassi) {
+    candidatos = todos.filter((v) => {
+      const okModelo = v.modelo.toLowerCase().includes(termo)
+      const okAno = !ano || v.ano_fabricacao === Number(ano)
+      return okModelo && okAno
+    })
+  }
+
+  return candidatos[0] || null
 }
 
 function goToCategory(cat) {
@@ -116,7 +160,7 @@ onMounted(async () => {
               placeholder="Ano"
               class="h-11 rounded-lg border border-white/15 bg-white/10 px-3.5 text-sm text-white placeholder:text-slate-300 focus:border-white/40 focus:outline-none"
             />
-            <BaseButton variant="success" size="md" type="submit">
+            <BaseButton variant="success" size="md" type="submit" :loading="searching">
               <template #icon><Search class="size-4" /></template>
               Buscar
             </BaseButton>

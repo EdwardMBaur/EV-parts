@@ -60,11 +60,12 @@ async function fetchPecas() {
   try {
     const params = {}
     const ctx = vehicle.context
-    if (ctx?.vin) params.vin = ctx.vin
-    else if (ctx?.montadora && ctx?.modelo && ctx?.ano) {
+    if (ctx?.montadora && ctx?.modelo && ctx?.ano) {
       params.montadora = ctx.montadora
       params.modelo = ctx.modelo
       params.ano = ctx.ano
+    } else if (ctx?.vin) {
+      params.vin = ctx.vin
     }
     if (filters.categorias.length) params.id_categoria = filters.categorias[0]
     if (filters.soh_min) params.soh_min = filters.soh_min
