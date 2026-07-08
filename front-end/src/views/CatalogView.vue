@@ -23,6 +23,7 @@ const pecas = ref([])
 const loading = ref(true)
 const ordenar = ref('relevancia')
 const showFiltersMobile = ref(false)
+const termo = ref((route.query.q || '').toString())
 
 const filters = reactive({
   categorias: route.query.id_categoria ? [Number(route.query.id_categoria)] : [],
@@ -31,15 +32,25 @@ const filters = reactive({
   codigo_oem: '',
 })
 
+const pecasFiltradas = computed(() => {
+  const q = termo.value.trim().toLowerCase()
+  if (!q) return pecas.value
+  return pecas.value.filter((p) =>
+    [p.nome_peca, p.codigo_oem, p.fabricante, p.nome_categoria]
+      .filter(Boolean)
+      .some((campo) => campo.toLowerCase().includes(q)),
+  )
+})
+
 const pecasOrdenadas = computed(() => {
-  const list = [...pecas.value]
+  const list = [...pecasFiltradas.value]
   if (ordenar.value === 'menor') list.sort((a, b) => Number(a.preco) - Number(b.preco))
   if (ordenar.value === 'maior') list.sort((a, b) => Number(b.preco) - Number(a.preco))
   return list
 })
 
 const totalLabel = computed(() => {
-  const n = pecas.value.length
+  const n = pecasOrdenadas.value.length
   const suffix = vehicle.hasContext ? ' compatíveis' : ''
   return `${n} ${n === 1 ? 'peça encontrada' : 'peças' + suffix + ' encontradas'}`
 })
@@ -91,6 +102,13 @@ watch(
   },
 )
 
+watch(
+  () => route.query.q,
+  (v) => {
+    termo.value = (v || '').toString()
+  },
+)
+
 onMounted(fetchPecas)
 </script>
 
@@ -116,8 +134,18 @@ onMounted(fetchPecas)
         </button>
       </div>
 
-      <div class="flex items-center justify-between gap-3 lg:hidden">
-        <BaseButton variant="outline" size="sm" @click="showFiltersMobile = true">
+      <div class="flex items-center justify-between gap-3">
+        <span
+          v-if="termo.trim()"
+          class="inline-flex items-center gap-2 rounded-full bg-electric-500/10 px-3 py-1 text-sm text-electric-700"
+        >
+          Busca: “{{ termo.trim() }}”
+          <button class="text-electric-700/70 hover:text-electric-700" aria-label="Limpar busca" @click="termo = ''">
+            <X class="size-3.5" />
+          </button>
+        </span>
+        <span v-else />
+        <BaseButton variant="outline" size="sm" class="lg:hidden" @click="showFiltersMobile = true">
           <template #icon><SlidersHorizontal class="size-4" /></template>
           Filtros
         </BaseButton>
@@ -148,7 +176,11 @@ onMounted(fetchPecas)
           <EmptyState
             v-else-if="!pecasOrdenadas.length"
             title="Nenhuma peça encontrada"
-            description="Tente ajustar os filtros ou alterar o veículo pesquisado."
+            :description="
+              termo.trim()
+                ? `Nada corresponde a “${termo.trim()}”. Tente outro termo ou ajuste os filtros.`
+                : 'Tente ajustar os filtros ou alterar o veículo pesquisado.'
+            "
           />
           <div v-else class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
             <PartCard v-for="peca in pecasOrdenadas" :key="peca.id_peca" :peca="peca" @add="addToCart" />

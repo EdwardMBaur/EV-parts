@@ -1,10 +1,9 @@
 <script setup>
-import { ref } from 'vue'
-import { RouterLink, useRouter } from 'vue-router'
+import { ref, watch } from 'vue'
+import { RouterLink, useRouter, useRoute } from 'vue-router'
 import { ShoppingCart, User, Search, LogOut, Headphones } from '@lucide/vue'
 import { useAuthStore } from '@/stores/auth'
 import { useCartStore } from '@/stores/cart'
-import { useVehicleStore } from '@/stores/vehicle'
 import BaseButton from '@/components/ui/BaseButton.vue'
 
 const props = defineProps({
@@ -12,15 +11,23 @@ const props = defineProps({
 })
 
 const router = useRouter()
+const route = useRoute()
 const auth = useAuthStore()
 const cart = useCartStore()
-const vehicle = useVehicleStore()
 
-const searchTerm = ref(vehicle.label || '')
+const searchTerm = ref((route.query.q || '').toString())
 const menuOpen = ref(false)
 
+watch(
+  () => route.query.q,
+  (v) => {
+    searchTerm.value = (v || '').toString()
+  },
+)
+
 function submitSearch() {
-  router.push({ name: 'pecas' })
+  const q = searchTerm.value.trim()
+  router.push({ name: 'pecas', query: q ? { q } : {} })
 }
 
 function logout() {
