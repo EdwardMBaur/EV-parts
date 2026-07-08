@@ -31,12 +31,27 @@ const filters = reactive({
   soh_min: null,
   preco_max: 18000,
   codigo_oem: '',
+  regioes: [],
 })
 
+// Faixas de CEP (primeiro dígito) por região — usado no filtro de Localização.
+const CEP_POR_REGIAO = {
+  sudeste: ['0', '1', '2', '3'],
+  sul: ['8', '9'],
+  'centro-oeste': ['7'],
+}
+
 const pecasFiltradas = computed(() => {
+  let lista = pecas.value
+
+  if (filters.regioes.length) {
+    const prefixos = filters.regioes.flatMap((r) => CEP_POR_REGIAO[r] || [])
+    lista = lista.filter((p) => p.cep_localizacao && prefixos.includes(p.cep_localizacao[0]))
+  }
+
   const q = termo.value.trim().toLowerCase()
-  if (!q) return pecas.value
-  return pecas.value.filter((p) =>
+  if (!q) return lista
+  return lista.filter((p) =>
     [p.nome_peca, p.codigo_oem, p.fabricante, p.nome_categoria]
       .filter(Boolean)
       .some((campo) => campo.toLowerCase().includes(q)),

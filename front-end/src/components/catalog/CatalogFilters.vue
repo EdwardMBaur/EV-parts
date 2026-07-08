@@ -18,6 +18,12 @@ const sohOptions = [
   { label: 'Abaixo de 80%', value: 0 },
 ]
 
+const regioes = [
+  { label: 'Sul', value: 'sul' },
+  { label: 'Sudeste', value: 'sudeste' },
+  { label: 'Centro-Oeste', value: 'centro-oeste' },
+]
+
 const PRECO_MIN = 800
 const PRECO_MAX = 18000
 
@@ -39,6 +45,13 @@ function selectSoh(value) {
   commit()
 }
 
+function toggleRegiao(value) {
+  local.regioes = local.regioes.includes(value)
+    ? local.regioes.filter((r) => r !== value)
+    : [...local.regioes, value]
+  commit()
+}
+
 function commit() {
   emit('update:modelValue', { ...local })
 }
@@ -53,6 +66,7 @@ function clear() {
   local.soh_min = null
   local.preco_max = PRECO_MAX
   local.codigo_oem = ''
+  local.regioes = []
   commit()
   emit('apply')
 }
@@ -111,6 +125,21 @@ onMounted(async () => {
             @change="selectSoh(opt.value)"
           />
           {{ opt.label }}
+        </label>
+      </div>
+    </div>
+
+    <div>
+      <h3 class="mb-3 text-sm font-bold text-ink-900">Localização</h3>
+      <div class="space-y-2">
+        <label v-for="reg in regioes" :key="reg.value" class="flex items-center gap-2 text-sm text-ink-700">
+          <input
+            type="checkbox"
+            :checked="local.regioes.includes(reg.value)"
+            class="size-4 rounded border-slate-300 text-electric-600 focus:ring-electric-400"
+            @change="toggleRegiao(reg.value)"
+          />
+          {{ reg.label }}
         </label>
       </div>
     </div>
